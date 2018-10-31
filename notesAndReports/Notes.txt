@@ -1,0 +1,210 @@
+23/12/2017:
+The main project website is here:
+http://joel-costigliola.github.io/assertj/assertj-core-quick-start.html
+
+Github project is available here:
+https://github.com/joel-costigliola/assertj-core
+
+- Start guides are also available for Guava, Joda Time, Database, Neo4J and Swing
+
+- Support for several dependency tools
+  http://search.maven.org/#artifactdetails|org.assertj|assertj-core|3.8.0|bundle
+  Maven
+  Gradle
+  Ivy
+  Groovy
+  Includes Scala as well
+
+  Support for Java 8, 7 and 6
+
+24/12/2017:
+- Code of conduct, contributor, issue template, pull request guidelines are clearly documented
+
+- Active contributor list with contributor guidelines
+http://joel-costigliola.github.io/assertj/assertj-core.html#contributing
+
+https://github.com/joel-costigliola/assertj-core/blob/master/CONTRIBUTING.md
+
+- 10 active pull requests
+
+- Code & Issues
+59 open items - mostly defects, some of them new feature, improvements
+
+25/12/2017
+- API tracking and compatibility between version
+	- Found an intresting link to https://github.com/joel-costigliola/assertj-core/issues/1061
+          an API tracker between version https://abi-laboratory.pro/java/tracker/timeline/assertj-core/
+          which depicts code churn
+
+        - https://github.com/lvc/japi-compliance-checker
+
+26/12/2017
+- Observed an issue https://github.com/joel-costigliola/assertj-core/issues/1043
+  which is related to reengineering bit of removal of duplicate code one of the code smells.
+- generated initial statistics using bash scripts
+  - lines, comments and vocab
+
+27/12/2017
+ - Joined the google+ group - will use it for discussion if needed
+https://groups.google.com/forum/?fromgroups=#!forum/assertj
+ - Based on the the code stats, listed the big classes based on LOC (using the available bash scripts)
+- Also installed static code analysis plugins such as Eclipse Metrics and Code City
+https://marketplace.eclipse.org/content/eclipse-metrics
+https://marketplace.eclipse.org/content/codecity#group-details
+
+Also found an interesting cross-language static code analyser - PMD
+https://pmd.github.io/pmd-6.0.0/pmd_release_notes.html
+
+28/12/2017:
+- Analysed the big classes.
+
+29/12/2017:
+- Analysis of major entities with the help of LOC, CodeCity Plugin
+- As part of Chat with Maintainers: I found an interview of Joel Costiglilola who is the main architect and contributor of assertj:
+http://www.mauricioaniche.com/2017/07/interview-with-joel-costigliola-assertj/
+
+- Introducton to AssertJ: http://www.baeldung.com/introduction-to-assertj
+- Found an intresting functional programming library for Java - http://www.vavr.io/
+30/12/2017:
+- Performed static and dynamic analysis
+- to perform code churn release to release - considered 2.8.0
+
+31/12/2017:
+ assertj-core-2.8.0  627c1db  @joel-costigliola joel-costigliola tagged this on May 21 · 446 commits to master since this tag
+https://github.com/joel-costigliola/assertj-core/releases/tag/assertj-core-2.8.0
+
+
+Re-engineering - 
+- Split and simplify GOD classes - below concrete classes which have more than 100+ methods
+
+On actual LOC
+./java/org/assertj/core/api/Assertions.java
+./java/org/assertj/core/api/WithAssertions.java
+./java/org/assertj/core/internal/Arrays.java
+./java/org/assertj/core/internal/Iterables.java
+
+On LOC (from CFG)
+org/assertj/core/api/AbstractIterableAssert
+org/assertj/core/internal/Arrays
+org/assertj/core/internal/Iterables
+org/assertj/core/api/AbstractObjectArrayAssert
+org/assertj/core/api/AtomicReferenceArrayAssert
+org/assertj/core/internal/Strings
+org/assertj/core/internal/Objects
+org/assertj/core/internal/DeepDifference
+org/assertj/core/presentation/StandardRepresentation
+
+- OPtimize High Cyclomatic Complexity methods
+Class Method Name	 LOC (from CFG)	 Cyclomatic Complexity
+org/assertj/core/api/AbstractSoftAssertions.getFirstStackTraceElementFromTest	104	12
+org/assertj/core/api/AbstractObjectArrayAssert.flatExtracting	118	6
+org/assertj/core/api/AbstractIterableAssert.flatExtracting	115	6
+org/assertj/core/api/AbstractAssert.removeCustomAssertRelatedElementsFromStackTraceIfNeeded	77	5
+
+- Duplicate code
+- Java6AbstractBDDSoftAssertions - then* methods duplicated from BDDAssertions
+- Atomic*Assert.java under [api] package
+- *ArrayAssert.java under [api] package
+- BinaryReporesentation.java and HexadecimalRepresentation.java under [presentation] package
+- DeleteDelta.java and ChangeDelta.java under [util] package
+- Snake.java and DiffNode.java  under [util] package
+
+- LongArrays, ShortArrays, FloatArrays, IntArrays, DoubleArrays, CharArrays and BooleanArrays under [Internal] package
+
+- Move String ORG_ASSERTJ = "org.assert"; to a common constant class.
+- Remove unused imports
+
+src/main/java/org/assertj/core/api/AbstractAssert.java:51:	This class has too many methods, consider refactoring it.
+:src/main/java/org/assertj/core/api/AbstractBDDSoftAssertions.java:40:	This class has too many methods, consider refactoring it.
+:src/main/java/org/assertj/core/api/AbstractBooleanArrayAssert.java:22:	This class has too many methods, consider refactoring it.
+:src/main/java/org/assertj/core/api/AbstractByteArrayAssert.java:24:	This class has too many methods, consider refactoring it.
+:src/main/java/org/assertj/core/api/AbstractCharArrayAssert.java:24:	This class has too many methods, consider refactoring it.
+:src/main/java/org/assertj/core/api/AbstractCharSequenceAssert.java:45:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractDateAssert.java:64:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractDoubleArrayAssert.java:25:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractFileAssert.java:40:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractFloatArrayAssert.java:25:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractIntArrayAssert.java:24:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractIterableAssert.java:105:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractListAssert.java:46:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractLocalDateTimeAssert.java:42:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractLongArrayAssert.java:24:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractMapAssert.java:46:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractObjectArrayAssert.java:89:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractObjectAssert.java:50:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractOffsetDateTimeAssert.java:42:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractOffsetTimeAssert.java:37:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractOptionalAssert.java:45:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractPathAssert.java:81:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractShortArrayAssert.java:24:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractSoftAssertions.java:22:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractStandardSoftAssertions.java:40:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractThrowableAssert.java:38:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractUriAssert.java:26:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractUrlAssert.java:26:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AbstractZonedDateTimeAssert.java:33:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/Assert.java:36:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/Assertions.java:134:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AssertionsForClassTypes.java:72:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AssertionsForInterfaceTypes.java:62:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/Assumptions.java:75:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AtomicIntegerArrayAssert.java:27:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AtomicIntegerAssert.java:29:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AtomicLongArrayAssert.java:27:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AtomicLongAssert.java:29:	This class has too many methods, consider refactoring it.
+):src/main/java/org/assertj/core/api/AtomicReferenceArrayAssert.java:71:	This class has too many methods, consider refactoring it.
+0):src/main/java/org/assertj/core/api/BDDAssertions.java:95:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/api/IterableAssert.java:41:	This class has too many methods, consider refactoring it.
+0):src/main/java/org/assertj/core/api/Java6AbstractBDDSoftAssertions.java:51:	This class has too many methods, consider refactoring it.
+1):src/main/java/org/assertj/core/api/Java6AbstractStandardSoftAssertions.java:51:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/api/Java6Assertions.java:72:	This class has too many methods, consider refactoring it.
+4):src/main/java/org/assertj/core/api/Java6BDDAssertions.java:53:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/api/ListAssert.java:45:	This class has too many methods, consider refactoring it.
+6):src/main/java/org/assertj/core/api/ObjectEnumerableAssert.java:36:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/api/ThrowableAssertAlternative.java:27:	This class has too many methods, consider refactoring it.
+5):src/main/java/org/assertj/core/api/WithAssertions.java:104:	This class has too many methods, consider refactoring it.
+8):src/main/java/org/assertj/core/api/WithAssumptions.java:71:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/api/WritableAssertionInfo.java:36:	This class has too many methods, consider refactoring it.
+8):src/main/java/org/assertj/core/api/filter/Filters.java:57:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/description/TextDescription.java:46:	Assigning an Object to null is a code smell.  Consider refactoring.
+4):src/main/java/org/assertj/core/error/BasicErrorMessageFactory.java:35:	This class has too many methods, consider refactoring it.
+6):src/main/java/org/assertj/core/error/DescriptionFormatter.java:48:	Assigning an Object to null is a code smell.  Consider refactoring.
+2):src/main/java/org/assertj/core/error/ShouldBeEqual.java:40:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/internal/Arrays.java:97:	This class has too many methods, consider refactoring it.
+1):src/main/java/org/assertj/core/internal/BooleanArrays.java:30:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/internal/ByteArrays.java:29:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/internal/CharArrays.java:30:	This class has too many methods, consider refactoring it.
+8):src/main/java/org/assertj/core/internal/Classes.java:59:	This class has too many methods, consider refactoring it.
+3):src/main/java/org/assertj/core/internal/CommonValidations.java:40:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/internal/Comparables.java:36:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/internal/ComparatorBasedComparisonStrategy.java:28:	This class has too many methods, consider refactoring it
+5):src/main/java/org/assertj/core/internal/Dates.java:68:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/internal/DeepDifference.java:46:	This class has too many methods, consider refactoring it.
+5):src/main/java/org/assertj/core/internal/DoubleArrays.java:29:	This class has too many methods, consider refactoring it.
+3):src/main/java/org/assertj/core/internal/ErrorMessages.java:20:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/internal/Failures.java:127:	Assigning an Object to null is a code smell.  Consider refactoring.
+3):src/main/java/org/assertj/core/internal/Files.java:55:	This class has too many methods, consider refactoring it.
+3):src/main/java/org/assertj/core/internal/Files.java:328:	Assigning an Object to null is a code smell.  Consider refactoring.
+1):src/main/java/org/assertj/core/internal/FloatArrays.java:29:	This class has too many methods, consider refactoring it.
+8):src/main/java/org/assertj/core/internal/IntArrays.java:30:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/internal/Iterables.java:101:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/internal/Lists.java:44:	This class has too many methods, consider refactoring it.
+0):src/main/java/org/assertj/core/internal/LongArrays.java:30:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/internal/Maps.java:59:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/internal/Numbers.java:36:	This class has too many methods, consider refactoring it.
+0):src/main/java/org/assertj/core/internal/ObjectArrays.java:41:	This class has too many methods, consider refactoring it.
+8):src/main/java/org/assertj/core/internal/Objects.java:75:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/internal/Objects.java:106:	Assigning an Object to null is a code smell.  Consider refactoring.
+4):src/main/java/org/assertj/core/internal/Paths.java:55:	This class has too many methods, consider refactoring it.
+1):src/main/java/org/assertj/core/internal/ShortArrays.java:29:	This class has too many methods, consider refactoring it.
+4):src/main/java/org/assertj/core/internal/StandardComparisonStrategy.java:31:	This class has too many methods, consider refactoring it.
+4):src/main/java/org/assertj/core/internal/Strings.java:79:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/internal/Throwables.java:42:	This class has too many methods, consider refactoring it.
+6):src/main/java/org/assertj/core/internal/Uris.java:40:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/internal/Urls.java:38:	This class has too many methods, consider refactoring it.
+6):src/main/java/org/assertj/core/presentation/BinaryRepresentation.java:22:	This class has too many methods, consider refactoring it.
+9):src/main/java/org/assertj/core/presentation/HexadecimalRepresentation.java:22:	This class has too many methods, consider refactoring it.
+7):src/main/java/org/assertj/core/presentation/StandardRepresentation.java:68:	This class has too many methods, consider refactoring it.
+2):src/main/java/org/assertj/core/util/DateUtil.java:35:	This class has too many methods, consider refactoring it.
+3):src/main/java/org/assertj/core/util/Files.java:42:	This class has too many methods, consider refactoring it.
+7884 609 826

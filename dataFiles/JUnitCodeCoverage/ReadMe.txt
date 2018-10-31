@@ -1,0 +1,1 @@
+Uncompress the files to view the JUnit - code coverage results.

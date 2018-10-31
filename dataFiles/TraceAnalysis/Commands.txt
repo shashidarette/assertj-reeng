@@ -1,0 +1,5 @@
+To create aspect.jar:
+C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment3\assignment-3-shashidarette\assertj-core\target>ajc -cp C:\aspectj1.8\lib\aspectjrt.jar -outxml -outjar aspects.jar AssertJCoreAspect.aj
+
+To execute core.api tests and capture trace:
+C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment3\assignment-3-shashidarette\assertj-core\target>java -javaagent:C:\aspectj-1.8.12\lib\aspectjweaver.jar -cp C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment3\assignment-3-shashidarette\assertj-core\target\aspects.jar;C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment3\assignment-3-shashidarette\assertj-core\target\assertj-core-3.9.0-SNAPSHOT.jar;C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment3\assignment-3-shashidarette\assertj-core\target\test-classes;C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment2\Libs\junit-4.12.jar;C:\Users\Shashi\Documents\MS\SEM2\SRE\Assignment2\Libs\hamcrest-core-1.3.jar  org.assertj.core.api.CoreApiTestClass
